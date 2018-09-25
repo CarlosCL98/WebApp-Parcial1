@@ -6,4 +6,4 @@ deployment:
   staging:
     branch: master
     heroku: 
-      appname: webapp-pacial1
+      appname: webapp-parcial1
