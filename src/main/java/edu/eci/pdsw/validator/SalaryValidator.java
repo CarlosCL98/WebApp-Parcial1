@@ -14,28 +14,22 @@ public class SalaryValidator implements EmployeeValidator {
 	 * {@inheritDoc}}
 	 */
 	public Optional<ErrorType> validate(Employee employee) {
-		
-		if (employee.getSalary() < 0) {
-			return Optional.of(ErrorType.NEGATIVE_SALARY);
+
+		Optional<ErrorType> op = Optional.empty();
+		long salary = employee.getSalary();
+		SocialSecurityType socialSecurityType = employee.getSocialSecurityType();
+
+		if (salary < 0) {
+			op.of(ErrorType.NEGATIVE_SALARY);
+		} else if ((0 <= salary && salary < 100) || salary > 50000) {
+			op.of(ErrorType.INVALID_SALARY);
+		} else if (socialSecurityType == SocialSecurityType.SISBEN && salary >= 1500) {
+			op.of(ErrorType.INVALID_SISBEN_AFFILIATION);
+		} else if (socialSecurityType == SocialSecurityType.EPS && (salary >= 10000 || salary < 1500)) {
+			op.of(ErrorType.INVALID_EPS_AFFILIATION);
+		} else if (socialSecurityType == SocialSecurityType.PREPAID && salary < 10000) {
+			op.of(ErrorType.INVALID_PREPAID_AFFILIATION);
 		}
-		else if (employee.getSalary() < 100 || employee.getSalary() > 50000) {
-			return Optional.of(ErrorType.INVALID_SALARY);
-		}
-		else if (employee.getSocialSecurityType() == SocialSecurityType.SISBEN) {
-			if (employee.getSalary() >= 1500) {
-				return Optional.of(ErrorType.INVALID_SISBEN_AFFILIATION);
-			}
-		}
-		else if (employee.getSocialSecurityType() == SocialSecurityType.EPS) {
-			if (employee.getSalary() >= 10000) {
-				return Optional.of(ErrorType.INVALID_SISBEN_AFFILIATION);
-			}
-		}
-		else if (employee.getSocialSecurityType() == SocialSecurityType.PREPAID) {
-			if (employee.getSalary() < 10000) {
-				return Optional.of(ErrorType.INVALID_PREPAID_AFFILIATION);
-			}
-		}
-		return Optional.empty();
+		return op;
 	}
 }
