@@ -20,15 +20,15 @@ public class SalaryValidator implements EmployeeValidator {
 		SocialSecurityType socialSecurityType = employee.getSocialSecurityType();
 
 		if (salary < 0) {
-			op.of(ErrorType.NEGATIVE_SALARY);
+			op = Optional.of(ErrorType.NEGATIVE_SALARY);
 		} else if ((0 <= salary && salary < 100) || salary > 50000) {
-			op.of(ErrorType.INVALID_SALARY);
+			op = Optional.of(ErrorType.INVALID_SALARY);
 		} else if (socialSecurityType == SocialSecurityType.SISBEN && salary >= 1500) {
-			op.of(ErrorType.INVALID_SISBEN_AFFILIATION);
+			op = Optional.of(ErrorType.INVALID_SISBEN_AFFILIATION);
 		} else if (socialSecurityType == SocialSecurityType.EPS && (salary >= 10000 || salary < 1500)) {
-			op.of(ErrorType.INVALID_EPS_AFFILIATION);
+			op = Optional.of(ErrorType.INVALID_EPS_AFFILIATION);
 		} else if (socialSecurityType == SocialSecurityType.PREPAID && salary < 10000) {
-			op.of(ErrorType.INVALID_PREPAID_AFFILIATION);
+			op = Optional.of(ErrorType.INVALID_PREPAID_AFFILIATION);
 		}
 		return op;
 	}
